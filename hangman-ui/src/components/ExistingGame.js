@@ -1,8 +1,6 @@
 import './ExistingGame.css';
 import { useLoaderData, useRevalidator } from 'react-router-dom';
-import WordToGuess from './WordToGuess';
-import LetterSelect from './LetterSelect';
-import VerifyGuess from './VerifyGuess';
+import { WordToGuess, LetterSelect, VerifyGuess } from './';
 
 function ExistingGame() {
   const game = useLoaderData();

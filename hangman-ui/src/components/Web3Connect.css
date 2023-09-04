@@ -1,0 +1,18 @@
+.account-block {
+  float: right;
+  padding: 0 25px;
+}
+
+button {
+  cursor: pointer;
+}
+
+.address {
+  cursor: default;
+  display: inline-block;
+  overflow: hidden;
+  padding: 0 10px;
+  text-overflow: ellipsis;
+  vertical-align: middle;
+  width: 100px;
+}

@@ -78,5 +78,6 @@ zokrates verify
 - Introduce seed to prevent brute-forcing
 - UI improvements
 - Chain selector
-- Increased wallet support
+- Increase wallet support
 - Test coverage
+- Optimize circuit

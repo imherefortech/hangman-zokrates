@@ -2,7 +2,7 @@
   text-align: left;
 }
 
-.App-header {
+.App-container {
   min-height: 40vh;
   display: flex;
   flex-direction: column;
@@ -10,7 +10,13 @@
   font-size: calc(10px + 2vmin);
 }
 
-.App-container {
+.App-header {
+  padding-top: 15px;
+  position: absolute;
+  width: 100%;
+}
+
+.App-view {
   position: relative;
 }
 

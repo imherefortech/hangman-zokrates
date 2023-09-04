@@ -1,9 +1,8 @@
 import './App.css';
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import NewGame from './NewGame';
-import ExistingGame from './ExistingGame';
+import { createBrowserRouter, RouterProvider } from 'react-router-dom';
+import { NewGame, ExistingGame, Web3Connect } from './';
 import gameLoader from '../data/game-loader';
-import config from '../config';
+import { WalletContextProvider } from '../WalletContext';
   
 const router = createBrowserRouter([
   {
@@ -17,25 +16,23 @@ const router = createBrowserRouter([
   }
 ]);
 
-if (window.ethereum.chainId !== config.chain.chainId) {
-  window.ethereum.request({
-    method: "wallet_addEthereumChain",
-    params: [config.chain]
-  });
-}
-
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <h2>
-          Play "Hangman" powered by Zero Knowledge Proofs
-        </h2>
-        <div className="App-container">
-          <RouterProvider router={router} />
+    <WalletContextProvider>
+      <div className="App">
+        <div className="App-header">
+          <Web3Connect />
         </div>
-      </header>
-    </div>
+        <div className="App-container">
+          <h2>
+            Play "Hangman" powered by Zero Knowledge Proofs
+          </h2>
+          <div className="App-view">
+            <RouterProvider router={router} />
+          </div>
+        </div>
+      </div>
+    </WalletContextProvider>
   );
 }
 
