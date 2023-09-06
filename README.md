@@ -1,8 +1,8 @@
 # Overview
 
-Implementation of the game [Hangman](https://en.wikipedia.org/wiki/Hangman_(game)) in Zokrates using zero-knowledge proofs to prove the presence of letters in a secret word. This is just a tech demo.
+Implementation of the game [Hangman](https://en.wikipedia.org/wiki/Hangman_(game)) in Zokrates using zero-knowledge proofs to prove the presence of letters in a secret word. This is mainly a tech demo.
 
-Deployed on Goerli and can be accessed at https://hangman-zk.netlify.app/
+Deployed on Goerli, Scroll Testnet, Polygon, and can be accessed at https://hangman-zk.netlify.app/
 
 The repo contains:
 - [Zokrates program](./hangman-contracts/hangman.zok)
@@ -77,7 +77,6 @@ zokrates verify
 # TODO
 - Introduce seed to prevent brute-forcing
 - UI improvements
-- Chain selector
 - Increase wallet support
 - Test coverage
 - Optimize circuit
