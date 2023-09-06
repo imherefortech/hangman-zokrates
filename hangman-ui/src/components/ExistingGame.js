@@ -1,14 +1,21 @@
 import './ExistingGame.css';
+import { useContext, useEffect } from 'react';
 import { useLoaderData, useRevalidator } from 'react-router-dom';
+import { WalletContext } from '../WalletContext';
 import { WordToGuess, LetterSelect, VerifyGuess } from './';
 
 function ExistingGame() {
   const game = useLoaderData();
   const revalidator = useRevalidator();
+  const { address, chainId } = useContext(WalletContext);
 
   function revalidateData() {
     revalidator.revalidate();
   }
+
+  useEffect(() => {
+    revalidator.revalidate();
+  }, [address, chainId]);
 
   if (game.length === 0) {
     return (<div className="game">Game doesn't exist</div>)
