@@ -21,5 +21,5 @@ module.exports = {
          url: "https://polygon.llamarpc.com",
          accounts
       }
-   },
+   }
 }

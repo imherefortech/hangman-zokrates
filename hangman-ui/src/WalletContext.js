@@ -56,15 +56,15 @@ export const WalletContextProvider = (props) => {
   useEffect(() => {
     if (window.ethereum) {
       const timer = setTimeout(() => {
-        updateState(window.ethereum);;
+        updateState(window.ethereum);
       }, 200);
       
       window.ethereum.on("chainChanged", () => {
-        updateState(window.ethereum);;
+        updateState(window.ethereum);
       });
       
       window.ethereum.on("accountsChanged", () => {
-        updateState(window.ethereum);;
+        updateState(window.ethereum);
       });
 
       return () => clearTimeout(timer);

@@ -1,6 +1,6 @@
 export default
 {
-    contractAddress: "0x239fB22836a23f297F68E32FdfF6289a217CAf82",
+    contractAddress: "0x97267aA06e86bE06782255507Ed52d210B16cA95",
     chains: [{
         chainId: "0x5",
         rpcUrls: ["https://ethereum-goerli.publicnode.com"],
