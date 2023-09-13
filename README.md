@@ -77,6 +77,7 @@ zokrates verify
 # TODO
 - Introduce seed to prevent brute-forcing
 - UI improvements
+- Event listening for game actions
 - Increase wallet support
 - Test coverage
 - Optimize circuit
