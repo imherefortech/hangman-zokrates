@@ -31,5 +31,6 @@ export default
             decimals: 18
         },
         blockExplorerUrls: ["https://polygonscan.com"]
-    }]
+    }],
+    ethRpc: "https://eth.llamarpc.com"
 }

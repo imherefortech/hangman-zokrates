@@ -4,25 +4,35 @@ import config from './config';
 
 export const WalletContext = createContext({ 
   address: '',
+  displayAddress: '',
   chainId: null,
   requestAddress: () => {},
   requestChain: () => {}
 });
 
+const browserProvider = new ethers.BrowserProvider(window.ethereum);
+const ethProvider = new ethers.getDefaultProvider(config.ethRpc);
+
 export const WalletContextProvider = (props) => {
   const [state, setState] = useState({
-    address: window?.ethereum?.selectedAddress,
-    chainId: window?.ethereum?.chainId,
+    address: window.ethereum?.selectedAddress,
+    chainId: window.ethereum?.chainId,
+    displayAddress: window.ethereum?.selectedAddress,
     requestAddress,
     requestChain
   });
 
-  function updateState(ethereum) {
-    const chain = config.chains.find(c => Number(c.chainId) === Number(ethereum.chainId));
+  function updateState(stateUpdate) {
+    const chainId = stateUpdate.chainId ?? state.chainId;
+    const chain = config.chains.find(c => Number(c.chainId) === Number(chainId));
+
+    const address = stateUpdate.address ?? state.address;
+    const displayAddress = stateUpdate.displayAddress ?? address;
     
     setState({
-      address: ethereum.selectedAddress,
+      address: address,
       chainId: chain?.chainId,
+      displayAddress: displayAddress,
       requestAddress,
       requestChain
     });
@@ -30,10 +40,7 @@ export const WalletContextProvider = (props) => {
 
   function requestAddress() {
     if (window.ethereum) {
-      const provider = new ethers.BrowserProvider(window.ethereum);
-      provider.send("eth_requestAccounts", []).then(async () => {
-        updateState(window.ethereum);
-      })
+      browserProvider.send("eth_requestAccounts", []);
     } else {
         console.error("Web3 wallet not found!");
     }
@@ -41,11 +48,10 @@ export const WalletContextProvider = (props) => {
 
   function requestChain(chainId) {
     if (window.ethereum) {
-      const provider = new ethers.BrowserProvider(window.ethereum);
-      provider.send("wallet_switchEthereumChain", [{ chainId }]).catch((ex) => {
+      browserProvider.send("wallet_switchEthereumChain", [{ chainId }]).catch((ex) => {
         if (ex.error.code === 4902) {
           const chain = config.chains.find(c => Number(c.chainId) === Number(chainId));
-          provider.send("wallet_addEthereumChain", [chain]);
+          browserProvider.send("wallet_addEthereumChain", [chain]);
         }
       });
     } else {
@@ -53,18 +59,27 @@ export const WalletContextProvider = (props) => {
     }
   }
 
+  async function updateDisplayAddress(address) {
+    const displayAddress = address
+      ? await ethProvider.lookupAddress(address)
+      : '';
+    updateState({ address, displayAddress });
+  }
+
   useEffect(() => {
     if (window.ethereum) {
-      const timer = setTimeout(() => {
-        updateState(window.ethereum);
+      const timer = setTimeout(async () => {
+        updateState({ address: window.ethereum.selectedAddress, chainId: window.ethereum.chainId });
+        await updateDisplayAddress(window.ethereum.selectedAddress);
       }, 200);
       
-      window.ethereum.on("chainChanged", () => {
-        updateState(window.ethereum);
+      window.ethereum.on("chainChanged", (chainId) => {
+        updateState({ chainId: chainId });
       });
       
-      window.ethereum.on("accountsChanged", () => {
-        updateState(window.ethereum);
+      window.ethereum.on("accountsChanged", async (accounts) => {
+        updateState({ address: accounts[0] });
+        await updateDisplayAddress(accounts[0]);
       });
 
       return () => clearTimeout(timer);
