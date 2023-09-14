@@ -3,8 +3,17 @@
   padding: 0 25px;
 }
 
-button {
+.connect-button {
+  background: white;
+  border: 1px solid rgb(190, 190, 190);
   cursor: pointer;
+  height: 38px;
+  margin-left: 20px;
+  padding: 10px 10px;
+}
+
+.connect-button:hover {
+  background: rgb(243, 243, 243);
 }
 
 .chain-select {
