@@ -16,6 +16,18 @@
   position: relative;
 }
 
+.App-links {
+  bottom: 2rem;
+  height: 3rem;
+  position: absolute;
+  right: 2rem;
+  width: 3rem;
+}
+
+.App-links img {
+  height: 100%;
+}
+
 .Form-label {
   font-size: calc(3px + 1.5vmin);
 }

@@ -31,6 +31,9 @@ function App() {
             <RouterProvider router={router} />
           </div>
         </div>
+        <div className="App-links">
+          <a target="_blank" href="https://github.com/imherefortech/hangman-zokrates"><img src="../github-mark.svg" /></a>
+      </div>
       </div>
     </WalletContextProvider>
   );
