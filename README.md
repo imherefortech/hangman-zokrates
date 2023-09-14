@@ -76,7 +76,7 @@ zokrates verify
 
 # TODO
 - Introduce seed to prevent brute-forcing
-- UI improvements
+- Limit to lowercase letters only
 - Event listening for game actions
 - Increase wallet support
 - Test coverage

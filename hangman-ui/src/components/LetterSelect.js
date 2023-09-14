@@ -41,15 +41,21 @@ export default function LetterSelect({ game, onSubmit }) {
 
   async function handleSubmit() {
     updateLoading([true, "Submitting transaction"]);
-    await gameWriter.suggestLetter(game.id, selectedLetter);
-    updateLoading([false, ""]);
-    onSubmit();
+
+    try {
+      await gameWriter.suggestLetter(game.id, selectedLetter);
+      onSubmit();
+      updateSelectedLetter(0);
+    }
+    finally {
+      updateLoading([false, ""]);
+    }
   }
 
   const charOffset = 97;
 
   return (
-    <BlockUi blocking={!game.isGuesserTurn || loading || gameFinished || game.host == address} message={loadingMessage}>
+    <BlockUi blocking={!game.isGuesserTurn || loading || gameFinished || game.host == address} message={loadingMessage} className={loading ? "" : "hide-loader"}>
       <h5 className="pick-letter">Pick a letter:</h5>
       <div className="alphabet">
         {[...Array(26)].map((_, i) =>
@@ -64,7 +70,7 @@ export default function LetterSelect({ game, onSubmit }) {
           </span>
         )}
       </div>
-      {selectedLetter ? <button onClick={handleSubmit}>Submit</button> : <div></div>}
+      {selectedLetter ? <button className="Button" onClick={handleSubmit}>Submit</button> : <div></div>}
     </BlockUi>
   );
 }

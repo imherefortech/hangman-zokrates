@@ -29,13 +29,26 @@ function ExistingGame() {
     .slice(0, game.length)
     .every(v => v !== 0);
 
+  let message;
+  if (gameFinished) {
+    message = '';
+  } else if (game.host == address && game.isGuesserTurn) {
+    message = 'This game is created by you. Wait for the players to make a guess';
+  } else if (game.host == address && !game.isGuesserTurn) {
+    message = 'Verify player\'s latest guess';
+  } else if (game.isGuesserTurn) {
+    message = "";
+  } else {
+    message = "Wait for the host to verify your guess";
+  }
+
   return (
     <div className="game">
       <div>
-        <h3>{gameFinished ? "Game finished!" : "Guess the word below"}</h3>
+        <h3>{gameFinished ? "Game finished!" : "Guess the secret word"}</h3>
         <WordToGuess game={game} />
       </div>
-      <h5>{gameFinished ? "" : game.isGuesserTurn ? "It is a player's turn to select a letter" : "It is a turn for the host to verify latest guess"}</h5>
+      <h5>{message}</h5>
       <LetterSelect game={game} onSubmit={revalidateData} />
       {game.host == address && !game.isGuesserTurn 
         ? <VerifyGuess game={game} onProofSubmitted={revalidateData} />

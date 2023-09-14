@@ -42,17 +42,16 @@ function NewGame() {
 
   return (
     <BlockUi blocking={loading} message={loadingMessage}>
-      <div className={`Fade ${loading ? "Fade-display" : ""}`}></div>
-
-      <h5>Choose a secret word (3-16 characters)</h5>
+      <h5 style={{ width: "60%" }}>To create a new game pick a secret word (3-16 characters)</h5>
       {!createGameProof ?
       (<form className="Form" name="generate-proof" onSubmit={handleGenerateProof}>
-          <input className="Form-text" name="word" type="text" />
-          <button className="Form-submit" type="submit">Generate proof</button>
+          <input className="Form-text" name="word" autoComplete="off" type="text" />
+          <button className="Form-submit Button" type="submit">Generate proof</button>
       </form>) :
 
       (<form name="submit-proof" onSubmit={handleSubmitProofToCreateGame}>
-          <button className="Form-submit" type="submit">Create game (submit proof to the blockchain)</button>
+          <div className="Form-message">Proof generated! Now submit it to the blockchain to create a game</div>
+          <button className="Form-submit Button" type="submit">Submit Proof</button>
       </form>)
       }
     </BlockUi>

@@ -3,10 +3,10 @@
 }
 
 .word-letter {
-    padding: 0 10px;
+    padding: 0 0.2em;
 }
 
 .pick-letter {
     text-align: left;
-    margin-bottom: 10px;
+    margin-bottom: 0.5rem;
 }

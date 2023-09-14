@@ -1,6 +1,10 @@
+.alphabet {
+  text-align: left;
+}
+
 .alphabet-letter {
-  padding: 0 3px;
   cursor: pointer;
+  padding: 0 0.1em;
 }
 
 .alphabet-letter.alphabet-letter-selected {
@@ -29,10 +33,6 @@
   cursor: default;
 }
 
-.block-ui-container {
-  cursor: default;
-}
-
-.loading-indicator {
-  display: none;
+.game .Button {
+  margin-top: 2vmin;
 }

@@ -57,13 +57,14 @@ export default function VerifyGuess({ game, onProofSubmitted }) {
       (<form className="Form" name="generate-proof" onSubmit={handleGenerateProof}>
           <label className="Form-label">
           To generate proof for the guess re-enter the secret word:
-          <input className="Form-text" name="word" type="text" />
+          <input className="Form-text" name="word" autoComplete="off" type="text" />
           </label>
-          <button className="Form-submit" type="submit">Generate proof</button>
+          <button className="Form-submit Button" type="submit">Generate proof</button>
       </form>) :
 
-      (<form name="submit-proof" onSubmit={handleSubmitProof}>
-          <button className="Form-submit" type="submit">Submit proof</button>
+      (<form name="Form submit-proof" onSubmit={handleSubmitProof}>
+          <div className="Form-message">Proof generated! Now submit it to the blockchain</div>
+          <button className="Form-submit Button" type="submit">Submit proof</button>
       </form>)
       }
       <span className="verify-guess-error">{error}</span>      
