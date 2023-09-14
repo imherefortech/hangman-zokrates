@@ -32,7 +32,7 @@ function App() {
           </div>
         </div>
         <div className="App-links">
-          <a target="_blank" href="https://github.com/imherefortech/hangman-zokrates"><img src="../github-mark.svg" /></a>
+          <a target="_blank" rel="noreferrer" href="https://github.com/imherefortech/hangman-zokrates"><img src="../github-mark.svg" alt="github" /></a>
       </div>
       </div>
     </WalletContextProvider>
