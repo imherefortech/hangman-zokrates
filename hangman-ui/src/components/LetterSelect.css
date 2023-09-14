@@ -33,6 +33,6 @@
   cursor: default;
 }
 
-.game .Button {
-  margin-top: 2vmin;
+.letter-select .Button {
+  margin-top: 0.6rem;
 }

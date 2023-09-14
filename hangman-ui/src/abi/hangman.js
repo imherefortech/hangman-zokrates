@@ -1,5 +1,4 @@
-export default
-{
+const hangmanContract = {
   "abi": [
     {
       "inputs": [
@@ -510,3 +509,5 @@ export default
     }
   ]
 }
+
+export default hangmanContract;

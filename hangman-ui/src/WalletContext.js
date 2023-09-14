@@ -14,7 +14,7 @@ const browserProvider = new ethers.BrowserProvider(window.ethereum);
 const ethProvider = new ethers.getDefaultProvider(config.ethRpc);
 
 export const WalletContextProvider = (props) => {
-  const [requestMethods, _] = useState({
+  const [requestMethods] = useState({
     requestAddress,
     requestChain
   });
@@ -64,11 +64,12 @@ export const WalletContextProvider = (props) => {
       });
       
       window.ethereum.on("accountsChanged", async (accounts) => {
-        await updateDisplayName(accounts[0]);
+        await updateDisplayName(accounts[0].toLowerCase());
       });
 
       return () => clearTimeout(timer);
     }
+  // eslint-disable-next-line 
   }, [window.ethereum]);
 
   return (

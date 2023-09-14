@@ -55,13 +55,14 @@ export default function LetterSelect({ game, onSubmit }) {
   const charOffset = 97;
 
   return (
-    <BlockUi blocking={!game.isGuesserTurn || loading || gameFinished || game.host == address} message={loadingMessage} className={loading ? "" : "hide-loader"}>
+    <BlockUi blocking={!game.isGuesserTurn || loading || gameFinished || game.host === address}
+        message={loadingMessage} className={classNames({ "hide-loader": !loading, "letter-select": true })}>
       <h5 className="pick-letter">Pick a letter:</h5>
       <div className="alphabet">
         {[...Array(26)].map((_, i) =>
           <span onClick={handleSelect} key={charOffset + i} code={charOffset + i} className={classNames({
             "alphabet-letter": true,
-            "alphabet-letter-selected": selectedLetter == charOffset + i,
+            "alphabet-letter-selected": selectedLetter === charOffset + i,
             "alphabet-letter-pending": letterPending(charOffset + i),
             "alphabet-letter-correct": letterCorrect(charOffset + i),
             "alphabet-letter-incorrect": letterIncorrect(charOffset + i)
