@@ -5,7 +5,7 @@ import { WalletContext } from '../WalletContext';
 import config from '../config';
 
 export default function Web3Connect() {
-  const { displayAddress, chainId, requestAddress, requestChain } = useContext(WalletContext);
+  const { displayName, chainId, requestAddress, requestChain } = useContext(WalletContext);
 
   const chainOptions = config.chains
     .map(c => { return { value: c.chainId, label: c.chainName }; });
@@ -17,8 +17,8 @@ export default function Web3Connect() {
   
   return <div className="account-block">
     <Select className="chain-select" options={chainOptions} isSearchable={false} onChange={onSelectChain} value={selected || ''} placeholder={'Wrong Network'} />
-    { displayAddress
-      ? <div className="address">{displayAddress}</div>
+    { displayName
+      ? <div className="address">{displayName}</div>
       : <button className="connect-button" onClick={requestAddress}>Connect Wallet</button>
     }
   </div>

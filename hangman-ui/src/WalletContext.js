@@ -4,7 +4,7 @@ import config from './config';
 
 export const WalletContext = createContext({ 
   address: '',
-  displayAddress: '',
+  displayName: '',
   chainId: null,
   requestAddress: () => {},
   requestChain: () => {}
@@ -21,7 +21,7 @@ export const WalletContextProvider = (props) => {
   const [chainId, setChainId] = useState(window.ethereum?.chainId);
   const [addressState, setAddressState] = useState({
     address: window.ethereum?.selectedAddress,
-    displayAddress: window.ethereum?.selectedAddress
+    displayName: window.ethereum?.selectedAddress
   });
 
   function requestAddress() {
@@ -45,18 +45,18 @@ export const WalletContextProvider = (props) => {
     }
   }
 
-  async function updateDisplayAddress(address) {
-    const displayAddress = address
+  async function updateDisplayName(address) {
+    const displayName = address
       ? await ethProvider.lookupAddress(address) ?? address
       : '';
-    setAddressState({ address, displayAddress });
+    setAddressState({ address, displayName });
   }
 
   useEffect(() => {
     if (window.ethereum) {
       const timer = setTimeout(async () => {
         setChainId(window.ethereum.chainId);
-        await updateDisplayAddress(window.ethereum.selectedAddress);
+        await updateDisplayName(window.ethereum.selectedAddress);
       }, 200);
       
       window.ethereum.on("chainChanged", (chainId) => {
@@ -64,7 +64,7 @@ export const WalletContextProvider = (props) => {
       });
       
       window.ethereum.on("accountsChanged", async (accounts) => {
-        await updateDisplayAddress(accounts[0]);
+        await updateDisplayName(accounts[0]);
       });
 
       return () => clearTimeout(timer);
