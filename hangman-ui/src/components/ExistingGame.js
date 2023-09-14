@@ -17,8 +17,12 @@ function ExistingGame() {
     revalidator.revalidate();
   }, [address, chainId]);
 
+  if (!game) {
+    return <div className="game">Please connect blockchain wallet to one of the supported chains</div>;
+  }
+
   if (game.length === 0) {
-    return (<div className="game">Game doesn't exist</div>)
+    return <div className="game">Game doesn't exist</div>;
   }
 
   const gameFinished = game.word

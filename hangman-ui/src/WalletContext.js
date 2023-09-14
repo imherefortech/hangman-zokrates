@@ -14,29 +14,15 @@ const browserProvider = new ethers.BrowserProvider(window.ethereum);
 const ethProvider = new ethers.getDefaultProvider(config.ethRpc);
 
 export const WalletContextProvider = (props) => {
-  const [state, setState] = useState({
-    address: window.ethereum?.selectedAddress,
-    chainId: window.ethereum?.chainId,
-    displayAddress: window.ethereum?.selectedAddress,
+  const [requestMethods, _] = useState({
     requestAddress,
     requestChain
   });
-
-  function updateState(stateUpdate) {
-    const chainId = stateUpdate.chainId ?? state.chainId;
-    const chain = config.chains.find(c => Number(c.chainId) === Number(chainId));
-
-    const address = stateUpdate.address ?? state.address;
-    const displayAddress = stateUpdate.displayAddress ?? address;
-    
-    setState({
-      address: address,
-      chainId: chain?.chainId,
-      displayAddress: displayAddress,
-      requestAddress,
-      requestChain
-    });
-  }
+  const [chainId, setChainId] = useState(window.ethereum?.chainId);
+  const [addressState, setAddressState] = useState({
+    address: window.ethereum?.selectedAddress,
+    displayAddress: window.ethereum?.selectedAddress
+  });
 
   function requestAddress() {
     if (window.ethereum) {
@@ -61,24 +47,23 @@ export const WalletContextProvider = (props) => {
 
   async function updateDisplayAddress(address) {
     const displayAddress = address
-      ? await ethProvider.lookupAddress(address)
+      ? await ethProvider.lookupAddress(address) ?? address
       : '';
-    updateState({ address, displayAddress });
+    setAddressState({ address, displayAddress });
   }
 
   useEffect(() => {
     if (window.ethereum) {
       const timer = setTimeout(async () => {
-        updateState({ address: window.ethereum.selectedAddress, chainId: window.ethereum.chainId });
+        setChainId(window.ethereum.chainId);
         await updateDisplayAddress(window.ethereum.selectedAddress);
       }, 200);
       
       window.ethereum.on("chainChanged", (chainId) => {
-        updateState({ chainId: chainId });
+        setChainId(chainId);
       });
       
       window.ethereum.on("accountsChanged", async (accounts) => {
-        updateState({ address: accounts[0] });
         await updateDisplayAddress(accounts[0]);
       });
 
@@ -87,7 +72,7 @@ export const WalletContextProvider = (props) => {
   }, [window.ethereum]);
 
   return (
-    <WalletContext.Provider value={state}>
+    <WalletContext.Provider value={{...requestMethods, chainId, ...addressState}}>
       {props.children}
     </WalletContext.Provider>
   )

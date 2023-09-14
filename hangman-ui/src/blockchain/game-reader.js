@@ -5,7 +5,12 @@ import config from '../config';
 async function read(id) {
     const provider = getProvider();
     const signer = await getSigner(provider);
+
+    if (!signer) return null;
+
     const contract = new ethers.Contract(config.contractAddress, hangmanContract.abi, provider);
+    const contractExists = await provider.getCode(config.contractAddress);
+    if (contractExists === '0x') return null;
 
     const game = await contract.games(id);
     const attempts = await contract.gameAttempts(id);
@@ -28,7 +33,11 @@ function getProvider() {
 }
 
 async function getSigner(provider) {
-    return  await provider.getSigner();
+    if (await provider.hasSigner()) {
+        return await provider.getSigner();
+    } else {
+        return null;
+    }
 }
 
 export default { read };
