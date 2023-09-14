@@ -1,10 +1,12 @@
 import './LetterSelect.css';
-import { useState } from 'react';
+import { useState, useContext } from 'react';
 import classNames from "classnames";
 import BlockUi from '@availity/block-ui';
 import gameWriter from '../blockchain/game-writer';
+import { WalletContext } from '../WalletContext';
 
 export default function LetterSelect({ game, onSubmit }) {
+  const { address } = useContext(WalletContext);
   const [selectedLetter, updateSelectedLetter] = useState(0);
   const [[ loading, loadingMessage ], updateLoading] = useState([false, ""]);
   const gameFinished = game.word
@@ -47,7 +49,7 @@ export default function LetterSelect({ game, onSubmit }) {
   const charOffset = 97;
 
   return (
-    <BlockUi blocking={!game.isGuesserTurn || loading || gameFinished || game.isHost} message={loadingMessage}>
+    <BlockUi blocking={!game.isGuesserTurn || loading || gameFinished || game.host == address} message={loadingMessage}>
       <h5 className="pick-letter">Pick a letter:</h5>
       <div className="alphabet">
         {[...Array(26)].map((_, i) =>

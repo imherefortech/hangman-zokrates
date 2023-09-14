@@ -15,7 +15,7 @@ function ExistingGame() {
 
   useEffect(() => {
     revalidator.revalidate();
-  }, [address, chainId]);
+  }, [chainId]);
 
   if (!game) {
     return <div className="game">Please connect blockchain wallet to one of the supported chains</div>;
@@ -37,7 +37,7 @@ function ExistingGame() {
       </div>
       <h5>{gameFinished ? "" : game.isGuesserTurn ? "It is a player's turn to select a letter" : "It is a turn for the host to verify latest guess"}</h5>
       <LetterSelect game={game} onSubmit={revalidateData} />
-      {game.isHost && !game.isGuesserTurn 
+      {game.host == address && !game.isGuesserTurn 
         ? <VerifyGuess game={game} onProofSubmitted={revalidateData} />
         : <span></span>
       }
