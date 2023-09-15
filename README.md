@@ -1,6 +1,6 @@
 # Overview
 
-Implementation of the game [Hangman](https://en.wikipedia.org/wiki/Hangman_(game)) in Zokrates using zero-knowledge proofs to prove the presence of letters in a secret word. This is mainly a tech demo.
+Implementation of the game [Hangman](https://en.wikipedia.org/wiki/Hangman_(game)) in Zokrates using zero-knowledge proofs. ZKPs are used to prove that a letter exists in a secret word without revealing the word itself.
 
 Deployed on Goerli, Scroll Testnet, Polygon, and can be accessed at https://hangman-zk.netlify.app/
 
