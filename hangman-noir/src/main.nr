@@ -11,7 +11,6 @@ fn main(word: str<16>, hash: pub [u8; 32], symbol: pub u8) -> pub [bool; 16] {
     for i in 0..16 {
         let match = word_bytes[i] == symbol;
         result[i] = match;
-        assert(result[i] == match);
     }
 
     result
