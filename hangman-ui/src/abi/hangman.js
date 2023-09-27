@@ -3,6 +3,17 @@ const hangmanContract = {
     {
       "inputs": [
         {
+          "internalType": "address",
+          "name": "_verifier",
+          "type": "address"
+        }
+      ],
+      "stateMutability": "nonpayable",
+      "type": "constructor"
+    },
+    {
+      "inputs": [
+        {
           "internalType": "uint256",
           "name": "gameId",
           "type": "uint256"
@@ -41,23 +52,12 @@ const hangmanContract = {
     {
       "inputs": [
         {
-          "internalType": "uint256[25]",
-          "name": "input",
-          "type": "uint256[25]"
+          "internalType": "uint32[8]",
+          "name": "wordHash",
+          "type": "uint32[8]"
         }
       ],
       "name": "InvalidWordHash",
-      "type": "error"
-    },
-    {
-      "inputs": [
-        {
-          "internalType": "uint256[25]",
-          "name": "input",
-          "type": "uint256[25]"
-        }
-      ],
-      "name": "InvalidWordInput",
       "type": "error"
     },
     {
@@ -74,6 +74,17 @@ const hangmanContract = {
     {
       "inputs": [
         {
+          "internalType": "bool[16]",
+          "name": "input",
+          "type": "bool[16]"
+        }
+      ],
+      "name": "InvalidWordMask",
+      "type": "error"
+    },
+    {
+      "inputs": [
+        {
           "internalType": "uint8",
           "name": "letter",
           "type": "uint8"
@@ -85,9 +96,9 @@ const hangmanContract = {
     {
       "inputs": [
         {
-          "internalType": "uint256[25]",
-          "name": "input",
-          "type": "uint256[25]"
+          "internalType": "uint256",
+          "name": "char",
+          "type": "uint256"
         }
       ],
       "name": "NotAStartGameInput",
@@ -235,7 +246,7 @@ const hangmanContract = {
               "type": "tuple"
             }
           ],
-          "internalType": "struct Verifier.Proof",
+          "internalType": "struct HangmanVerifierZokrates.Proof",
           "name": "proof",
           "type": "tuple"
         },
@@ -410,7 +421,7 @@ const hangmanContract = {
               "type": "tuple"
             }
           ],
-          "internalType": "struct Verifier.Proof",
+          "internalType": "struct HangmanVerifierZokrates.Proof",
           "name": "proof",
           "type": "tuple"
         },
@@ -428,83 +439,6 @@ const hangmanContract = {
       "name": "verifyLetter",
       "outputs": [],
       "stateMutability": "nonpayable",
-      "type": "function"
-    },
-    {
-      "inputs": [
-        {
-          "components": [
-            {
-              "components": [
-                {
-                  "internalType": "uint256",
-                  "name": "X",
-                  "type": "uint256"
-                },
-                {
-                  "internalType": "uint256",
-                  "name": "Y",
-                  "type": "uint256"
-                }
-              ],
-              "internalType": "struct Pairing.G1Point",
-              "name": "a",
-              "type": "tuple"
-            },
-            {
-              "components": [
-                {
-                  "internalType": "uint256[2]",
-                  "name": "X",
-                  "type": "uint256[2]"
-                },
-                {
-                  "internalType": "uint256[2]",
-                  "name": "Y",
-                  "type": "uint256[2]"
-                }
-              ],
-              "internalType": "struct Pairing.G2Point",
-              "name": "b",
-              "type": "tuple"
-            },
-            {
-              "components": [
-                {
-                  "internalType": "uint256",
-                  "name": "X",
-                  "type": "uint256"
-                },
-                {
-                  "internalType": "uint256",
-                  "name": "Y",
-                  "type": "uint256"
-                }
-              ],
-              "internalType": "struct Pairing.G1Point",
-              "name": "c",
-              "type": "tuple"
-            }
-          ],
-          "internalType": "struct Verifier.Proof",
-          "name": "proof",
-          "type": "tuple"
-        },
-        {
-          "internalType": "uint256[25]",
-          "name": "input",
-          "type": "uint256[25]"
-        }
-      ],
-      "name": "verifyTx",
-      "outputs": [
-        {
-          "internalType": "bool",
-          "name": "r",
-          "type": "bool"
-        }
-      ],
-      "stateMutability": "view",
       "type": "function"
     }
   ]

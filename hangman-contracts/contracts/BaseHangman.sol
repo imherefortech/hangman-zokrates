@@ -27,16 +27,16 @@ abstract contract BaseHangman {
 
     error GameAlreadyExsits(uint gameId);
     error GameNotActive(uint gameId);
-    error NotAStartGameInput(uint[25] input);
+    error NotAStartGameInput(uint char);
     error InvalidProof();
-    error InvalidWordInput(uint[25] input);
+    error InvalidWordMask(bool[16] input);
     error InvalidWordLength(uint8 wordLength);
     error NotGuesserTurn();
     error NotTurnToVerify();
     error LetterWasUsed(uint8 letter);
     error InvalidGuess(uint8 letter);
     error NotLatestGuess(uint8 latestGuess, uint8 verificationForGuess);
-    error InvalidWordHash(uint[25] input);
+    error InvalidWordHash(uint32[8] wordHash);
     error OnlyHost(address host, address attempted);
 
     modifier _guesserTurn(uint gameId) {
@@ -78,30 +78,25 @@ abstract contract BaseHangman {
         game.guesserTurn = false;
     }
 
-    function _createGame(uint[25] calldata input) internal {
+    function _createGame(uint32[8] memory wordHash, bool[16] memory wordMask) internal {
         uint gameId = uint(keccak256(abi.encodePacked(msg.sender, block.timestamp)));
         
         // Basic validation
         if (games[gameId].length > 0) revert GameAlreadyExsits(gameId);
-        if (input[8] != 0) revert NotAStartGameInput(input);
 
-        // Determine word length and validate 9-24 elements of the input. Revert if it's not consecutive 0's at the beginning followed by 1's till the end
+        // Determine word length and validate mask input. Revert if it's not consecutive false's at the beginning followed by true's till the end
         uint8 wordLength;
-        for (uint i = 9; i < input.length; i++) {
-            if (input[i] == 0 && wordLength == i - 9) {
+        for (uint i = 0; i < wordMask.length; i++) {
+            if (!wordMask[i] && wordLength == i) {
                 wordLength++;
-            } else if (input[i] == 0) {
-                revert InvalidWordInput(input);
+            } else if (!wordMask[i]) {
+                revert InvalidWordMask(wordMask);
             }
         }
 
         if (wordLength < 3) revert InvalidWordLength(wordLength);
 
-        // Persist game information in storage
-        for (uint i = 0; i < 8; i++) {
-            // Conversion is safe as proof verification would fail if these are not u32 numbers
-            games[gameId].secretWordHash[i] = uint32(input[i]);
-        }
+        games[gameId].secretWordHash = wordHash;
         games[gameId].length = wordLength;
         games[gameId].guesserTurn = true;
         games[gameId].host = msg.sender;
@@ -109,18 +104,18 @@ abstract contract BaseHangman {
         emit GameCreated(gameId, wordLength, msg.sender);
     }
 
-    function _verifyLetter(uint[25] calldata input, uint gameId) internal {
+    function _verifyLetter(uint32[8] memory wordHash, uint8 letter, bool[16] memory mask, uint gameId) internal {
         Game storage game = games[gameId];
 
         // Validate input
-        checkWordHashMatches(game, input);
-        if (input[8] != game.attempts[game.attempts.length - 1]) revert NotLatestGuess(game.attempts[game.attempts.length - 1], uint8(input[8]));
+        checkWordHashMatches(game, wordHash);
+        if (letter != game.attempts[game.attempts.length - 1]) revert NotLatestGuess(game.attempts[game.attempts.length - 1], uint8(letter));
 
         // Store letter positions in the result if guessed correctly
         uint gameLength = game.length;
-        for (uint i = 9; i < 9 + gameLength; i++) {
-            if (input[i] == 1) {
-                game.word[i - 9] = uint8(input[8]);
+        for (uint i = 0; i < gameLength; i++) {
+            if (mask[i]) {
+                game.word[i] = uint8(letter);
             }
         }
 
@@ -131,9 +126,9 @@ abstract contract BaseHangman {
         }
     }
 
-    function checkWordHashMatches(Game memory game, uint[25] memory input) internal pure {
+    function checkWordHashMatches(Game memory game, uint32[8] memory wordHash) internal pure {
         for (uint i = 0; i < 8; i++) {
-            if (game.secretWordHash[i] != uint32(input[i])) revert InvalidWordHash(input);
+            if (game.secretWordHash[i] != uint32(wordHash[i])) revert InvalidWordHash(wordHash);
         }
     }
 

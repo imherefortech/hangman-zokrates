@@ -23,7 +23,21 @@ contract HangmanZokrates is BaseHangman {
      *    For "Hello" the mask will be 0000011111111111 which proofs that the word is 5 characters long
      */
     function createGame(HangmanVerifierZokrates.Proof calldata proof, uint[25] calldata input) external {
-        _createGame(input);
+
+        if (input[8] != 0) revert NotAStartGameInput(input[8]);
+
+        uint32[8] memory wordHash;
+        for (uint i = 0; i < 8; i++) {
+            // Casting is safe as proof verification would fail if these are not u32 numbers
+            wordHash[i] = uint32(input[i]);
+        }
+
+        bool[16] memory wordMask;
+        for (uint i = 9; i < input.length; i++) {
+            wordMask[i-9] = input[i] == 0 ? false : true;
+        }
+        
+        _createGame(wordHash, wordMask);
 
         if (!verifier.verifyTx(proof, input)) revert InvalidProof();
     }
@@ -39,7 +53,20 @@ contract HangmanZokrates is BaseHangman {
      * @param gameId Game for which verification is submitted
      */
     function verifyLetter(HangmanVerifierZokrates.Proof calldata proof, uint[25] calldata input, uint gameId) external _verifierTurn(gameId) {
-        _verifyLetter(input, gameId);
+        uint32[8] memory wordHash;
+        for (uint i = 0; i < 8; i++) {
+            // Casting is safe as proof verification would fail if these are not u32 numbers
+            wordHash[i] = uint32(input[i]);
+        }
+
+        bool[16] memory mask;
+        for (uint i = 9; i < input.length; i++) {
+            mask[i-9] = input[i] == 0 ? false : true;
+        }
+
+        uint8 letter = uint8(input[8]);
+
+        _verifyLetter(wordHash, letter, mask, gameId);
 
         if (!verifier.verifyTx(proof, input)) revert InvalidProof();
     }
