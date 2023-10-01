@@ -2,7 +2,7 @@ import './LetterSelect.css';
 import { useState, useContext } from 'react';
 import classNames from "classnames";
 import BlockUi from '@availity/block-ui';
-import gameWriter from '../blockchain/game-writer';
+import hangmanZokrates from '../blockchain/zokrates/hangman-zokrates';
 import { WalletContext } from '../WalletContext';
 
 export default function LetterSelect({ game, onSubmit }) {
@@ -43,7 +43,7 @@ export default function LetterSelect({ game, onSubmit }) {
     updateLoading([true, "Submitting transaction"]);
 
     try {
-      await gameWriter.suggestLetter(game.id, selectedLetter);
+      await hangmanZokrates.suggestLetter(game.id, selectedLetter);
       onSubmit();
       updateSelectedLetter(0);
     }

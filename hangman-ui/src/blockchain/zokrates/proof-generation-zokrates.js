@@ -1,15 +1,6 @@
 import { initialize } from "zokrates-js";
-import utils from './utils';
 
-function generateCreateGameProof(word, updateStatus) {
-    return generateProof(word, "0", updateStatus);
-}
-
-function generateLetterProof(word, letter, updateStatus) {
-    return generateProof(word, letter, updateStatus);
-}
-
-async function generateProof(word, symbol, updateStatus) {
+async function generateProof(input, updateStatus) {
     await updateStatus("Initializing zokrates...");
     const zokratesProvider = await initialize();
 
@@ -37,7 +28,7 @@ async function generateProof(word, symbol, updateStatus) {
     const artifacts = zokratesProvider.compile(code);
 
     await updateStatus("Computing witness...");
-    const { witness } = zokratesProvider.computeWitness(artifacts, generateGameInput(word, symbol));
+    const { witness } = zokratesProvider.computeWitness(artifacts, input);
 
     await updateStatus("Generating proof...");
     const proovingKey = await getProovingKey();
@@ -48,23 +39,6 @@ async function generateProof(word, symbol, updateStatus) {
     return proof;
 }
 
-function generateGameInput(word, symbol) {
-    const input = [[]];
-
-    // First input is a padded word
-    for (let i = 0; i < 16; i++) {
-        input[0].push(word[i] === undefined ? "0" : word[i].charCodeAt(0).toString());
-    }
-
-    // Second input is a hashed word
-    const hashedWord = utils.paddedHash(word);
-    input.push(hashedWord);
-
-    // Third input is a character we are verifying (0 for new game)
-    input.push(symbol);
-    return input;
-}
-
 async function getProovingKey() {
     const response = await fetch('/proving.key')
     const blob = await response.blob();
@@ -73,4 +47,4 @@ async function getProovingKey() {
     return [...new Uint8Array(buffer)];
 }
 
-export default { generateCreateGameProof, generateLetterProof };
+export default { generateProof };

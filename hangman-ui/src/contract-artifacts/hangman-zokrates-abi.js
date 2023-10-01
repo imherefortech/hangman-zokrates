@@ -1,4 +1,4 @@
-const hangmanContract = {
+const hangmanZokratesContract = {
   "abi": [
     {
       "inputs": [
@@ -444,4 +444,4 @@ const hangmanContract = {
   ]
 }
 
-export default hangmanContract;
+export default hangmanZokratesContract;

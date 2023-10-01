@@ -1,8 +1,7 @@
 import { useState } from 'react';
 import { useNavigate } from "react-router-dom"
 import BlockUi from '@availity/block-ui';
-import prover from '../proof-generation';
-import gameWriter from '../blockchain/game-writer';
+import hangman from '../blockchain/zokrates/hangman-zokrates';
 
 
 function NewGame() {
@@ -18,7 +17,7 @@ function NewGame() {
 
     if (word.length < 3 || word.length > 16) return;
     
-    const proof = await prover.generateCreateGameProof(word, async (status) => { 
+    const proof = await hangman.generateNewGameProof(word, async (status) => { 
       setLoading([true, status]);
       // Otherwise the thread is blocked by proof computations and status never updates
       await new Promise(resolve => {
@@ -34,7 +33,7 @@ function NewGame() {
     e.preventDefault();
     
     setLoading([true, "Submitting transaction"]);
-    const gameId = await gameWriter.createGame(createGameProof);    
+    const gameId = await hangman.createGame(createGameProof);    
     setLoading([false, ""]);
 
     navigate(`game/${gameId}`);

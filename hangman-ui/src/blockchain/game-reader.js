@@ -1,5 +1,5 @@
 import { ethers } from 'ethers';
-import hangmanContract from '../abi/hangman';
+import hangmanZokratesContract from '../contract-artifacts/hangman-zokrates-abi';
 import config from '../config';
 
 async function read(id) {
@@ -9,7 +9,7 @@ async function read(id) {
   const signer = await getSigner(provider);
   if (!signer) return null;
 
-  const contract = new ethers.Contract(config.contractAddress, hangmanContract.abi, provider);
+  const contract = new ethers.Contract(config.contractAddress, hangmanZokratesContract.abi, provider);
   const contractExists = await provider.getCode(config.contractAddress);
   if (contractExists === '0x') return null;
   

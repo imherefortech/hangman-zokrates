@@ -1,8 +1,7 @@
 import './VerifyGuess.css';
 import { useState } from 'react';
 import BlockUi from '@availity/block-ui';
-import prover from '../proof-generation';
-import gameWriter from '../blockchain/game-writer';
+import hangmanZokrates from '../blockchain/zokrates/hangman-zokrates';
 import utils from '../utils';
 
 export default function VerifyGuess({ game, onProofSubmitted }) {
@@ -27,7 +26,7 @@ export default function VerifyGuess({ game, onProofSubmitted }) {
       }
     }
 
-    const proof = await prover.generateLetterProof(word, latestGuess.toString(), async (status) => {
+    const proof = await hangmanZokrates.generateLetterProof(word, latestGuess.toString(), async (status) => {
       setLoading([true, status]);
       // Otherwise the thread is blocked by proof computations and status never updates
       await new Promise(resolve => {
@@ -43,7 +42,7 @@ export default function VerifyGuess({ game, onProofSubmitted }) {
     e.preventDefault();
     
     setLoading([true, "Submitting transaction"]);
-    await gameWriter.verifyLetter(proof, game.id);
+    await hangmanZokrates.verifyLetter(proof, game.id);
     setLoading([false, ""]);
 
     onProofSubmitted();
