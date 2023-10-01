@@ -1,8 +1,13 @@
 require('dotenv').config();
 require("@nomiclabs/hardhat-ethers");
+const { deploy } = require("./tasks/deploy");
 
 const { PRIVATE_KEY } = process.env;
 const accounts = [`0x${PRIVATE_KEY}`];
+
+task("deploy", "Deploy contracts")
+   .addParam("framework", "Zokrates or Noir")
+   .setAction(async (taskArgs) => await deploy(taskArgs.framework));
 
 module.exports = {
    solidity: {
