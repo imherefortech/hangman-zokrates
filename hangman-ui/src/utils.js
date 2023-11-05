@@ -1,18 +1,11 @@
-import sha256 from 'crypto-js/sha256';
+import CryptoJS from 'crypto-js';
 
-// Generates hash of the word padded to 16 characters. Outputs in the format required for proof generation.
-function paddedHash(word) {
-  if (word.length > 16) throw new Error("Word must be 16 characters or less.");
-
+// Generates sha256 hash in the format required for Zokrates
+function sha256Zokrates(str) {
   let result = [];
 
-  let paddedWord = word;
-  for (let i = 0; i < 16 - word.length; i++) {
-      paddedWord += String.fromCharCode(0);
-  }
-
   // Second input is a hashed word
-  const sha256Array = sha256(paddedWord);
+  const sha256Array = CryptoJS.SHA256(str);
   for (let i = 0; i < 8; i++) {
       const unsignedSha256Word = sha256Array.words[i] >>> 0;
       result.push(unsignedSha256Word.toString());
@@ -20,5 +13,17 @@ function paddedHash(word) {
 
   return result;
 }
+// Generates sha256 hash in the format required for Noir
+function sha256Noir(str) {
+  const hash = CryptoJS.SHA256(str);
+  const hexString = hash.toString(CryptoJS.enc.Hex);
+  
+  const result = [];
+  for (let i = 0; i < hexString.length; i += 2) {
+    result.push(parseInt(hexString.substr(i, 2), 16));
+  }
 
-export default { paddedHash };
+  return result;
+}
+
+export default { sha256Zokrates, sha256Noir };

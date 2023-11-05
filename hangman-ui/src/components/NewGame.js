@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useNavigate } from "react-router-dom"
 import BlockUi from '@availity/block-ui';
-import hangman from '../blockchain/zokrates/hangman-zokrates';
+import hangman from '../blockchain/noir/hangman-noir';
 
 
 function NewGame() {

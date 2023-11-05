@@ -1,39 +1,32 @@
 import { ethers } from 'ethers';
-import hangmanZokratesContract from '../../contract-artifacts/hangman-zokrates-abi';
+import hangmanNoirContract from '../../contract-artifacts/hangman-noir-abi';
 import config from '../../config';
-import proofGeneration from './proof-generation-zokrates';
+import proofGeneration from './proof-generation-noir';
 import utils from '../../utils';
 
 async function generateNewGameProof(word, statusCallback) {
-  return await proofGeneration.generateProof(buildWitnessInput(word, "0"), statusCallback);
+  return await proofGeneration.generateProof(buildWitnessInput(word, " "), statusCallback);
 }
 
 async function generateLetterProof(word, letter, statusCallback) {
   return await proofGeneration.generateProof(buildWitnessInput(word, letter), statusCallback);
 }
 
-function buildWitnessInput(word, symbol) {
-    const input = [[]];
-
-    // First input is a padded word
-    for (let i = 0; i < 16; i++) {
-        input[0].push(word[i] === undefined ? "0" : word[i].charCodeAt(0).toString());
-    }
-
-    const paddedWord = word.padEnd(16, String.fromCharCode(0));
-    // Second input is a hashed word
-    const hashedWord = utils.sha256Zokrates(paddedWord);
-    input.push(hashedWord);
-
-    // Third input is a character we are verifying (0 for new game)
-    input.push(symbol);
-    return input;
+function buildWitnessInput(word, letter) {
+  const paddedWord = word.padEnd(16, ' ');
+  const hash = utils.sha256Noir(paddedWord);
+  const symbol = letter.charCodeAt(0);
+  
+  return Array.from(paddedWord)
+    .map(l => l.charCodeAt(0))
+    .concat(hash)
+    .concat([symbol]);
 }
 
 async function createGame(proof) {
   const signer = await connectWallet();
 
-  const tx = await getContract(signer).createGame(proof.proof, proof.inputs);
+  const tx = await getContract(signer).createGame(proof.slice(49*32), [proof.slice(0, 49*32)]);
   const receipt = await tx.wait();
 
   const gameId = receipt.logs[0].topics[1];
@@ -51,12 +44,12 @@ async function suggestLetter(gameId, letter) {
 async function verifyLetter(proof, gameId) {
   const signer = await connectWallet();
 
-  const tx = await getContract(signer).verifyLetter(proof.proof, proof.inputs, gameId);
+  const tx = await getContract(signer).verifyLetter(proof.slice(49*32), [proof.slice(0, 49*32)], gameId);
   await tx.wait();
 }
 
 function getContract(signer) {
-  return new ethers.Contract(config.contractAddress, hangmanZokratesContract.abi, signer);
+  return new ethers.Contract(config.contractAddress, hangmanNoirContract.abi, signer);
 }
 
 async function connectWallet() {
