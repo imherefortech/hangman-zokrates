@@ -38,6 +38,10 @@ module.exports = {
       polygon: {
          url: "https://polygon.llamarpc.com",
          accounts
+      },
+      scroll: {
+         url: "https://rpc.scroll.io",
+         accounts
       }
    }
 }

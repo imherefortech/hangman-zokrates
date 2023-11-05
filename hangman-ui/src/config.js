@@ -1,6 +1,6 @@
 export default
 {
-    contractAddress: "0x699b568e6Bf9e2CfEcF4DE6Ea486808d33335D5b",
+    contractAddress: "0x60F774111B8d76d4772f33F0C050B40a7A1ed54A",
     chains: [{
         chainId: "0x5",
         rpcUrls: ["https://ethereum-goerli.publicnode.com"],
@@ -22,15 +22,27 @@ export default
         },
         blockExplorerUrls: ["https://sepolia-blockscout.scroll.io/"]
     }, {
-        chainId: "0x89",
-        rpcUrls: ["https://polygon-rpc.com"],
-        chainName: "Polygon",
+        chainId: "0x82750",
+        rpcUrls: ["https://rpc.scroll.io"],
+        chainName: "Scroll",
         nativeCurrency: {
-            name: "MATIC",
-            symbol: "MATIC",
+            name: "ETH",
+            symbol: "ETH",
             decimals: 18
         },
-        blockExplorerUrls: ["https://polygonscan.com"]
+        blockExplorerUrls: ["https://scrollscan.com"],
     }],
     ethRpc: "https://eth.llamarpc.com"
 }
+
+// {
+//     chainId: "0x89",
+//     rpcUrls: ["https://polygon-rpc.com"],
+//     chainName: "Polygon",
+//     nativeCurrency: {
+//         name: "MATIC",
+//         symbol: "MATIC",
+//         decimals: 18
+//     },
+//     blockExplorerUrls: ["https://polygonscan.com"],
+// }
